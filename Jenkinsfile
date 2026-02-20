@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([ credentialsId: 'for-k8s-repo', url: '' ]) {
+                withDockerRegistry([ credentialsId: 'token-for-kubernetes-repo', url: '' ]) {
                      bat "docker push $DOCKERHUB/$IMAGE:$TAG"
                 }
             }
