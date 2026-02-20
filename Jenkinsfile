@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "adimane-08/nginx-probe"  // Replace with your DockerHub repo
+        IMAGE_NAME = "yourdockerhub/nginx-probe"  // Replace with your DockerHub repo
         IMAGE_TAG = "${BUILD_NUMBER}"
         KUBECONFIG = "C:\\Users\\Admin\\.kube\\config"  // Path to your kubeconfig
     }
@@ -42,3 +42,4 @@ pipeline {
         }
     }
 }
+cls
