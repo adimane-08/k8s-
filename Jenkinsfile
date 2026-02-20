@@ -23,6 +23,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig-1', variable: 'KUBECONFIG')]) {
+                    bat 'kubectl get nodes'
+                }
+            }
+        }
         stage('Update Deployment') {
             steps {
                 bat "kubectl set image deployment/nginx-probe nginx=$DOCKERHUB/$IMAGE:$TAG"
