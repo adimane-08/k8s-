@@ -8,11 +8,11 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
+       /* stage('Checkout Code') {
             steps {
                 git 'https://github.com/adimane-08/k8s-.git'
             }
-        }
+        } */
 
         stage('Build Docker Image') {
             steps {
