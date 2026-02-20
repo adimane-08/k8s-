@@ -1,45 +1,40 @@
 pipeline {
     agent any
-
     environment {
-        IMAGE_NAME = "yourdockerhub/nginx-probe"  // Replace with your DockerHub repo
-        IMAGE_TAG = "${BUILD_NUMBER}"
-        KUBECONFIG = "C:\\Users\\Admin\\.kube\\config"  // Path to your kubeconfig
+        DOCKERHUB = 'adimane-08'
+        IMAGE = 'nginx-probe'
+        TAG = 'latest'
     }
-
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'feature', url: 'https://github.com/adimane-08/k8s-.git', credentialsId: 'code-for-k8s'
+            }
+        }
         stage('Build Docker Image') {
             steps {
-                echo "Building Docker image..."
-                bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
+                sh "docker build -t $DOCKERHUB/$IMAGE:$TAG ."
             }
         }
-
         stage('Push Docker Image') {
             steps {
-                echo "Pushing Docker image to DockerHub..."
-                bat "docker login -u your_dockerhub_username -p your_dockerhub_password"
-                bat "docker push %IMAGE_NAME%:%IMAGE_TAG%"
+                withDockerRegistry([ credentialsId: 'dockerhub-cred', url: '' ]) {
+                    sh "docker push $DOCKERHUB/$IMAGE:$TAG"
+                }
             }
         }
-
         stage('Update Deployment') {
             steps {
-                echo "Updating Kubernetes deployment..."
-                // Option 1: update image directly
-                bat "kubectl set image -f nginx-probe.yaml nginx=%IMAGE_NAME%:%IMAGE_TAG%"
-
-                // Option 2: apply the whole YAML if you have other changes
-                // bat "kubectl apply -f nginx-probe.yaml"
+                sh "kubectl set image deployment/nginx-probe nginx=$DOCKERHUB/$IMAGE:$TAG"
             }
         }
     }
-
     post {
-        always {
-            echo "Cleaning workspace..."
-            cleanWs()
+        success {
+            echo 'Deployment updated successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
-cls
