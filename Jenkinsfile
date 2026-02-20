@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+        KUBECONFIG = 'C:\\Users\\Aditya\\.kube\\config'
         DOCKERHUB = 'adimane0801'
         IMAGE = 'nginx-probe'
         TAG = 'latest'
