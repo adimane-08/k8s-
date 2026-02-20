@@ -2,36 +2,43 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "adimane0801/nginx-probe"
+        IMAGE_NAME = "adimane-08/nginx-probe"  // Replace with your DockerHub repo
         IMAGE_TAG = "${BUILD_NUMBER}"
+        KUBECONFIG = "C:\\Users\\Admin\\.kube\\config"  // Path to your kubeconfig
     }
 
     stages {
-
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/adimane-08/k8s-.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $IMAGE_NAME:$IMAGE_TAG ."
+                echo "Building Docker image..."
+                bat "docker build -t %IMAGE_NAME%:%IMAGE_TAG% ."
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                sh "docker push $IMAGE_NAME:$IMAGE_TAG"
+                echo "Pushing Docker image to DockerHub..."
+                bat "docker login -u your_dockerhub_username -p your_dockerhub_password"
+                bat "docker push %IMAGE_NAME%:%IMAGE_TAG%"
             }
         }
 
-        stage('Update Deployment Image') {
+        stage('Update Deployment') {
             steps {
-                sh """
-                kubectl set image deployment/nginx-probe nginx=$IMAGE_NAME:$IMAGE_TAG
-                """
+                echo "Updating Kubernetes deployment..."
+                // Option 1: update image directly
+                bat "kubectl set image -f nginx-probe.yaml nginx=%IMAGE_NAME%:%IMAGE_TAG%"
+
+                // Option 2: apply the whole YAML if you have other changes
+                // bat "kubectl apply -f nginx-probe.yaml"
             }
+        }
+    }
+
+    post {
+        always {
+            echo "Cleaning workspace..."
+            cleanWs()
         }
     }
 }
