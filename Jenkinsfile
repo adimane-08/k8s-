@@ -4,7 +4,7 @@ pipeline {
         KUBECONFIG = 'C:\\Users\\Aditya\\.kube\\config'
         DOCKERHUB = 'adimane0801'
         IMAGE = 'nginx-probe'
-        TAG = 'latest'
+        TAG = '1.28'
     }
     stages {
         stage('Checkout') {
