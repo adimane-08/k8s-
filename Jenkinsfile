@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB = 'adimane-08'
+        DOCKERHUB = 'adimane0801'
         IMAGE = 'nginx-probe'
         TAG = 'latest'
     }
