@@ -29,7 +29,6 @@ pipeline {
             steps {
                
                     bat 'kubectl get nodes'
-                }
             }
         }
         stage('Update Deployment') {
