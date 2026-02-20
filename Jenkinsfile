@@ -13,19 +13,19 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $DOCKERHUB/$IMAGE:$TAG ."
+                bat "docker build -t $DOCKERHUB/$IMAGE:$TAG ."
             }
         }
         stage('Push Docker Image') {
             steps {
                 withDockerRegistry([ credentialsId: 'dockerhub-cred', url: '' ]) {
-                    sh "docker push $DOCKERHUB/$IMAGE:$TAG"
+                     bat "docker push $DOCKERHUB/$IMAGE:$TAG"
                 }
             }
         }
         stage('Update Deployment') {
             steps {
-                sh "kubectl set image deployment/nginx-probe nginx=$DOCKERHUB/$IMAGE:$TAG"
+                bat "kubectl set image deployment/nginx-probe nginx=$DOCKERHUB/$IMAGE:$TAG"
             }
         }
     }
