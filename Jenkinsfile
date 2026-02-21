@@ -4,7 +4,7 @@ pipeline {
         KUBECONFIG = 'C:\\Users\\Aditya\\.kube\\config'
         DOCKERHUB = 'adimane0801'
         IMAGE = 'nginx-probe'
-        TAG = '1.28'
+        TAG = '1.29'
     }
     stages {
         stage('Checkout') {
@@ -28,7 +28,12 @@ pipeline {
         stage('Deploy') {
             steps {
                
-                    bat 'kubectl get nodes'
+                    helm upgrade nginx-probe . \
+                     --set image.repository=adimane0801/nginx-probe \
+                     --set image.tag=1.28.2 \
+                      -n dev
+
+
             }
         }
         stage('Update Deployment') {
