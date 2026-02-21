@@ -27,13 +27,13 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                bat """
                
                     helm upgrade nginx-probe . \
                      --set image.repository=adimane0801/nginx-probe \
                      --set image.tag=1.28.2 \
                       -n dev
-
-
+                 """
             }
         }
         stage('Update Deployment') {
