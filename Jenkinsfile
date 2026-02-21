@@ -29,9 +29,9 @@ pipeline {
             steps {
                 bat """
                
-                    helm upgrade nginx-probe . \
-                     --set image.repository=adimane0801/nginx-probe \
-                     --set image.tag=1.28.2 \
+                    helm upgrade --install nginx-probe myapp ^
+                     --set image.repository=adimane0801/nginx-probe ^
+                     --set image.tag=1.28.2 ^
                       -n dev
                  """
             }
